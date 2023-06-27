@@ -1,0 +1,213 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+
+    <div class="col-sm-12">
+        <!--inicio tarjeta-->
+        <div class="card">
+            <div class="card-header">Usuarios</div>
+            <div class="card-body">
+
+                <button class="btn btn-success" id="btnNuevo">Nuevo Usuario</button>
+                <hr />
+
+                <table class="table table-striped" id="tbUsuario">
+                    <thead>
+                        <tr>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Genero</th>
+                            <th>Direccion</th>
+                            <th>Estado Civil</th>
+                            <th>DPI</th>
+                            <th></th>
+                        </tr>
+                    
+                    </thead>
+                    <tbody>
+                        </tbody>
+                        </table>
+
+
+                        </div>
+        </div>
+        <!--fin tarjeta-->
+    </div>
+</div>
+
+
+                            <!--Inicio Modal-->
+<div class="modal" tabindex="-1">
+
+<div class="modal-dialog">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h5 class="modal-title">Detalle Usuario</h5>
+
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        </div>
+
+        <div class="modal-body">
+
+            <input type="hidden" id="txtldUsuario" value="0" />
+
+            <div class="mb-2">
+
+                <label>Nombres</label>
+
+                <input type="text" class="form-control" id="txtNombres" />
+
+            </div>
+
+
+                <div class="mb-2">
+
+                    <label>Apellidos</label>
+
+                    <input type="text" class="form-control" id="txtApellidos" />
+
+                </div>
+
+                <div class="mb-2">
+
+                    <label>Fecha Nacimiento</label> <input type="text" class="form-control" id="txtFechaNacimiento" />
+
+                </div>
+
+
+
+
+            <div class="mb-2">
+
+                <label>Genero</label>
+
+                <input type="text" class="form-control" id="txtGenero" />
+
+            </div>
+
+
+                <div class="mb-2">
+
+                    <label>Direccion</label>
+
+                    <input type="text" class="form-control" id="txtDireccion" />
+
+                </div>
+
+
+                <div class="mb-2">
+
+                    <label>Estado Civil</label>
+
+                    <input type="text" class="form-control" id="txtEstadoCivil" />
+
+                </div>
+
+                <div class="mb-2">
+
+                    <label>DPI</label>
+
+                    <input type="text" class="form-control" id="txtDpi" />
+
+                </div>
+
+        </div>
+
+        <div class="modal-footer">
+
+            <button type="button" class="btn btn-primary" id="btnGuardar">Guardar</button>
+
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+ <!--Fin Modal-->
+
+
+
+                @section Scripts {
+                    <script>
+                        const Modelo_base = {
+                            idUsuario: 0,
+                            nombres: "",
+                            apellidos: "",
+                            fechaNacimiento: "",
+                            genero: "",
+                            direccion: "",
+                            estadoCivil: "",
+                            dpi: ""
+                        }
+
+                        function mostrarModal(modelo){
+                            $("#txtldUsuario").val(modelo.idUsuario);
+                            $("#txtNombres").val(modelo.nombres);
+                            $("#txtApellidos").val(modelo.apellidos);
+                            $("#txtFechaNacimiento").val(modelo.fechaNacimiento);
+                            $("#txtGenero").val(modelo.genero);
+                            $("#txtDireccion").val(modelo.direccion);
+                            $("#txtEstadoCivil").val(modelo.estadocivil);
+                            $("#txtDpi").val(modelo.dpi);
+
+                            $('.modal').modal('show');
+
+
+                        }
+
+                        $("#btnNuevo").click(()=>{
+                            mostrarModal(Modelo_base);
+                        })
+
+
+                        $("#btnGuardar").click(()=>{
+
+                            let NuevoModelo = Modelo_base;
+
+                            NuevoModelo["idUsuario"]=  $("#txtldUsuario").val();
+                            NuevoModelo["nombres"]=  $("#txtNombres").val();
+                            NuevoModelo["apellidos"]=  $("#txtApellidos").val();
+                            NuevoModelo["fechaNacimiento"]=  $("#txtFechaNacimiento").val();
+                            NuevoModelo["genero"]=  $("#txtGenero").val();
+                            NuevoModelo["direccion"]=  $("#txtDireccion").val();
+                            NuevoModelo["estadoCivil"]=  $("#txtEstadoCivil").val();
+                            NuevoModelo["dpi"]=  $("#txtDpi").val();
+
+            if ( $("#txtldUsuario").val() =="0"){
+                fetch("Home/Insertar",{
+                    method:"POST",
+                    Headers: {
+                        'Content-Type': 'application/json;charset=utf-8'
+                    },
+                    body: JSON.stringify(NuevoModelo)
+                })
+                .then((response)=>{
+                    return response.ok ? response.json(): Promise.reject(response)
+                })
+                .then((dataJson)=>{
+
+                        if (dataJson.Valor){
+                            alert("Registrado");
+                            $('.modal').modal('hide');
+                        }
+                })
+            }
+
+
+                            mostrarModal(Modelo_base);
+                        })
+
+
+                    </script>
+                }
